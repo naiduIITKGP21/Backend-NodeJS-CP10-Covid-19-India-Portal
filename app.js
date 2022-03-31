@@ -54,3 +54,29 @@ app.post("/login", async (request, response) => {
     }
   }
 });
+
+//Authentication with token
+const authenticateToken = (request, response, next) => {
+  const authHeader = request.headers["Authorization"];
+  if (authHeader === undefined) {
+    response.status(401);
+    response.send("Invalid JWT Token");
+  } else {
+    const jwtToken = authHeader.split(" ")[1];
+    console.log(jwtToken);
+    if (jwtToken === undefined) {
+      response.status(401);
+      response.send("Invalid JWT Token");
+    } else {
+      jwt.verify(jwtToken, "a1234s", (error, user) => {
+        if (error) {
+        } else {
+          next();
+        }
+      });
+    }
+  }
+};
+
+//API 2: Authentication with Token
+//app.get("/states/", (request, response) => {});
